@@ -10,22 +10,20 @@ app.post('/gerar-pdf', async (req, res) => {
 
   try {
     const browser = await puppeteer.launch({
-      headless: true,
+      headless: 'new',
       args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
 
     const page = await browser.newPage();
-    await page.goto(url, {waitFor: 'networkidle0'});
+    await page.goto(url, {waitFor: 'networkidle2'});
     await page.emulateMediaType('screen');
 
     const pdfBuffer = await page.pdf({
       path: 'roteiro.pdf',
-      scale: 1,
       format: 'A4',
       margin: { top: '1cm', right: '1cm', bottom: '1cm', left: '1cm' },
       printBackground: true,
       displayHeaderFooter: true,
-      headerTemplate: '<div>Custom Header</div>',
       footerTemplate: '<div style="width: 100%; text-align: center; font-size: 10px;">Página <span class="pageNumber"></span> de <span class="totalPages"></span></div>'
     });
 
