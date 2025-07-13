@@ -36,6 +36,10 @@ app.post('/gerar-pdf', async (req, res) => {
 
     const page = await browser.newPage();
     await page.goto(url, {waitUntil: 'networkidle2'});
+    await page.waitForFunction(() => {
+    const el = document.querySelector('.label-about');
+    return el && el.textContent.includes('Sobre a viagem');
+  }, { timeout: 30000 });
 
     const pdfBuffer = await page.pdf({
       path: 'roteiro.pdf',
