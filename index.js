@@ -30,16 +30,16 @@ app.post('/gerar-pdf', async (req, res) => {
 
   try {
     const browser = await puppeteer.launch({
-      headless: 'new',
+      headless: false,
       args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
 
     const page = await browser.newPage();
     await page.goto(url, {waitUntil: 'networkidle2'});
-    await page.waitForFunction(() => {
-    const el = document.querySelector('.label-about');
-    return el && el.textContent.includes('Sobre a viagem');
-  }, { timeout: 30000 });
+    await page.waitForResponse(response =>
+    response.url().includes('/api/proposal/pdf/') &&
+    response.status() === 200
+    );
 
     const pdfBuffer = await page.pdf({
       path: 'roteiro.pdf',
