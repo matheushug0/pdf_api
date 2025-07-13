@@ -29,7 +29,10 @@ app.post('/gerar-pdf', async (req, res) => {
   if (!url) return res.status(400).send({ error: 'URL obrigatória' });
 
   try {
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
+    });
 
     const page = await browser.newPage();
     await page.goto(url, {waitUntil: 'networkidle2'});
