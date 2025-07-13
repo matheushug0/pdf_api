@@ -15,7 +15,8 @@ app.post('/gerar-pdf', async (req, res) => {
     });
 
     const page = await browser.newPage();
-    await page.waitForTimeout(10000);
+    await page.goto(url, { waitUntil: 'networkidle2' });
+    await page.waitForSelector('.label-about', { timeout: 10000 });
 
     const pdfBuffer = await page.pdf({
       format: 'A4',
