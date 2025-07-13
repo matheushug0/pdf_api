@@ -30,19 +30,17 @@ app.post('/gerar-pdf', async (req, res) => {
 
   try {
     const browser = await puppeteer.launch({
-      executablePath: '/usr/bin/google-chrome',
       headless: 'new',
       args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
 
     const page = await browser.newPage();
-    await page.goto(url, {waitUntil: 'networkidle2'});
+    await page.goto(url, {waitUntil: 'networkidle0', timeout: 0});
     await autoScroll(page);
     await page.emulateMediaType('screen');
 
     const pdfBuffer = await page.pdf({
       path: 'roteiro.pdf',
-      format: 'Letter',
       margin: { top: '1cm', right: '1cm', bottom: '1cm', left: '1cm' },
       printBackground: true,
       displayHeaderFooter: true,
