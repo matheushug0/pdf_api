@@ -10,12 +10,13 @@ app.post('/gerar-pdf', async (req, res) => {
 
   try {
     const browser = await puppeteer.launch({
-      headless: 'new',
+      headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
 
     const page = await browser.newPage();
-    await page.goto(url, {waitFor: 'networkidle2'});
+    await page.goto(url, {waitFor: 'networkidle0'});
+    await page.emulateMediaType('screen');
 
     const pdfBuffer = await page.pdf({
       path: 'roteiro.pdf',
