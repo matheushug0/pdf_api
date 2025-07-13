@@ -30,7 +30,7 @@ app.post('/gerar-pdf', async (req, res) => {
 
   try {
     const browser = await puppeteer.launch({
-      headless: true,
+      headless: 'new',
       args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
 
@@ -39,6 +39,7 @@ app.post('/gerar-pdf', async (req, res) => {
 
     const pdfBuffer = await page.pdf({
       path: 'roteiro.pdf',
+      format: 'A4',
       margin: { top: '1cm', right: '1cm', bottom: '1cm', left: '1cm' },
       printBackground: true,
       displayHeaderFooter: true,
