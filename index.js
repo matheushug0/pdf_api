@@ -9,14 +9,16 @@ app.post('/gerar-pdf', async (req, res) => {
   if (!url) return res.status(400).send({ error: 'URL obrigatória' });
 
   try {
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
-    await page.goto(url, {
-      waitUntil: 'networkidle2',
+    const browser = await puppeteer.launch({
+      headless: 'new',
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
-    // Saves the PDF to hn.pdf.
-    await page.pdf({
-      path: 'roteiro.pdf',
+
+    const page = await browser.newPage();
+    await page.goto(url, { waitUntil: 'networkidle2' });
+
+    const pdfBuffer = await page.pdf({
+      path: 'roteiro.pdf'
     });
 
     await browser.close();
