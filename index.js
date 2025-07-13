@@ -16,7 +16,7 @@ app.post('/gerar-pdf', async (req, res) => {
 
     const page = await browser.newPage();
     await page.goto(url, { waitUntil: 'domcontentloaded' });
-    await page.locator('.label-about').wait();
+    await page.waitForSelector('.spinner-border-sm', { hidden: true, timeout: 30000 });
 
     const pdfBuffer = await page.pdf({
       path: 'roteiro.pdf',
