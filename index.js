@@ -4,6 +4,26 @@ import puppeteer from 'puppeteer';
 const app = express();
 app.use(express.json());
 
+// Função que rola até o fim da página
+async function autoScroll(page) {
+  await page.evaluate(async () => {
+    await new Promise((resolve) => {
+      let totalHeight = 0;
+      const distance = 100;
+      const timer = setInterval(() => {
+        const scrollHeight = document.body.scrollHeight;
+        window.scrollBy(0, distance);
+        totalHeight += distance;
+
+        if (totalHeight >= scrollHeight) {
+          clearInterval(timer);
+          resolve();
+        }
+      }, 100); // ajusta a velocidade se quiser
+    });
+  });
+}
+
 app.post('/gerar-pdf', async (req, res) => {
   const { url } = req.body;
   if (!url) return res.status(400).send({ error: 'URL obrigatória' });
@@ -16,6 +36,7 @@ app.post('/gerar-pdf', async (req, res) => {
 
     const page = await browser.newPage();
     await page.goto(url, {waitUntil: 'networkidle2'});
+    await autoScroll(page);
     await page.emulateMediaType('screen');
 
     const pdfBuffer = await page.pdf({
