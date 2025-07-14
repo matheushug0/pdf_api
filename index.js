@@ -41,7 +41,6 @@ app.post('/gerar-pdf', async (req, res) => {
     await page.waitForSelector(".sc-hYQoXb");
 
     const pdfBuffer = await page.pdf({
-      path: 'roteiro.pdf',
       format: 'Legal',
       // margin: { top: '1cm', right: '1cm', bottom: '1cm', left: '1cm' },
       printBackground: true,
