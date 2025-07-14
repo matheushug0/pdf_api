@@ -25,8 +25,8 @@ async function autoScroll(page) {
 }
 
 app.post('/gerar-pdf', async (req, res) => {
-  const { url } = req.body;
-  if (!url) return res.status(400).send({ error: 'URL obrigatória' });
+  const { url, token } = req.body;
+  if (!url || !token) return res.status(400).send({ error: 'URL e token são obrigatórios' });
 
   try {
     const browser = await puppeteer.launch({
@@ -35,7 +35,8 @@ app.post('/gerar-pdf', async (req, res) => {
     });
 
     const page = await browser.newPage();
-    await page.goto(url, {waitUntil: 'networkidle2'});
+    await page.goto((url + token), {waitUntil: 'networkidle2'});
+    await setTimeout(() => {}, 10000);
 
     const pdfBuffer = await page.pdf({
       path: 'roteiro.pdf',
