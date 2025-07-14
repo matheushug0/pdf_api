@@ -47,14 +47,7 @@ app.post('/gerar-pdf', async (req, res) => {
       displayHeaderFooter: true,
       // footerTemplate: '<div style="width: 100%; text-align: center; font-size: 10px;">Página <span class="pageNumber"></span> de <span class="totalPages"></span></div>'
     });
-
     await browser.close();
-
-    res.set({
-      'Content-Type': 'application/pdf',
-      'Content-Disposition': 'attachment; filename=roteiro.pdf'
-    });
-
     res.send(pdfBuffer);
   } catch (err) {
     console.error(err);
