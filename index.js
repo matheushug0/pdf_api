@@ -35,16 +35,20 @@ app.post('/gerar-pdf', async (req, res) => {
     });
 
     const page = await browser.newPage();
-    await page.goto((url));
-    setTimeout(() => {}, 60000);
+    await page.goto((url), {
+      "waitUntil": "domcontentloaded",
+      "timeout": 30000
+    });
+    // await page.setDefaultNavigationTimeout(30000);
+    // await page.setDefaultTimeout(10000);
 
     const pdfBuffer = await page.pdf({
-      path: 'roteiro.pdf',
-      format: 'A4',
-      margin: { top: '1cm', right: '1cm', bottom: '1cm', left: '1cm' },
-      printBackground: true,
-      displayHeaderFooter: true,
-      footerTemplate: '<div style="width: 100%; text-align: center; font-size: 10px;">Página <span class="pageNumber"></span> de <span class="totalPages"></span></div>'
+      path: 'roteiro.pdf'
+      // format: 'A4',
+      // margin: { top: '1cm', right: '1cm', bottom: '1cm', left: '1cm' },
+      // printBackground: true,
+      // displayHeaderFooter: true,
+      // footerTemplate: '<div style="width: 100%; text-align: center; font-size: 10px;">Página <span class="pageNumber"></span> de <span class="totalPages"></span></div>'
     });
 
     await browser.close();
