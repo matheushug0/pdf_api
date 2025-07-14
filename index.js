@@ -30,24 +30,22 @@ app.post('/gerar-pdf', async (req, res) => {
 
   try {
     const browser = await puppeteer.launch({
-      headless: 'new',
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
+      "headless": "new",
+      "args": ["--no-sandbox", "--disable-setuid-sandbox"]
     });
 
     const page = await browser.newPage();
-    await page.goto((url), {
-      "waitUntil": "domcontentloaded",
-      "timeout": 30000
-    });
-    // await page.setDefaultNavigationTimeout(30000);
-    // await page.setDefaultTimeout(10000);
+    await page.setViewport({ width: 1920, height: 1080 });
+    await page.goto((url));
+    await page.goto((url));
+    await page.waitForSelector(".sc-hYQoXb");
 
     const pdfBuffer = await page.pdf({
-      path: 'roteiro.pdf'
-      // format: 'A4',
+      path: 'roteiro.pdf',
+      format: 'Legal',
       // margin: { top: '1cm', right: '1cm', bottom: '1cm', left: '1cm' },
-      // printBackground: true,
-      // displayHeaderFooter: true,
+      printBackground: true,
+      displayHeaderFooter: true,
       // footerTemplate: '<div style="width: 100%; text-align: center; font-size: 10px;">Página <span class="pageNumber"></span> de <span class="totalPages"></span></div>'
     });
 
