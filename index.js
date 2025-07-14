@@ -34,18 +34,31 @@ app.post('/gerar-pdf', async (req, res) => {
       "args": ["--no-sandbox", "--disable-setuid-sandbox"]
     });
 
+
+    
     const page = await browser.newPage();
     await page.setViewport({ width: 1920, height: 1080 });
     await page.goto((url));
     await page.goto((url));
     await page.waitForSelector(".sc-hYQoXb");
+    await page.addStyleTag({
+  content: `
+    .nao-quebrar {
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+  `
+});
+    await page.evaluate(() => {
+  document.querySelectorAll('.no-break').forEach(el => {
+    el.classList.add('nao-quebrar');
+  });
+});
 
     const pdfBuffer = await page.pdf({
-      format: 'Legal',
-      // margin: { top: '1cm', right: '1cm', bottom: '1cm', left: '1cm' },
+      format: 'Tabloid',
       printBackground: true,
-      displayHeaderFooter: true,
-      // footerTemplate: '<div style="width: 100%; text-align: center; font-size: 10px;">Página <span class="pageNumber"></span> de <span class="totalPages"></span></div>'
+      displayHeaderFooter: true
     });
 
     await browser.close();
