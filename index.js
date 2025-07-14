@@ -25,7 +25,7 @@ async function autoScroll(page) {
 }
 
 app.post('/gerar-pdf', async (req, res) => {
-  const { url, token } = req.body;
+  const { url } = req.body;
   if (!url || !token) return res.status(400).send({ error: 'URL e token são obrigatórios' });
 
   try {
@@ -35,8 +35,8 @@ app.post('/gerar-pdf', async (req, res) => {
     });
 
     const page = await browser.newPage();
-    await page.goto((url + token), {waitUntil: 'networkidle2'});
-    await setTimeout(() => {}, 10000);
+    await page.goto((url));
+    setTimeout(() => {}, 60000);
 
     const pdfBuffer = await page.pdf({
       path: 'roteiro.pdf',
