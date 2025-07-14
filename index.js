@@ -26,7 +26,7 @@ async function autoScroll(page) {
 
 app.post('/gerar-pdf', async (req, res) => {
   const { url } = req.body;
-  if (!url || !token) return res.status(400).send({ error: 'URL e token são obrigatórios' });
+  if (!url) return res.status(400).send({ error: 'URL e token são obrigatórios' });
 
   try {
     const browser = await puppeteer.launch({
